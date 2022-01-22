@@ -32,10 +32,10 @@ def main():
 
                 no = response['data']['wpInfos'][item]['wpid']
                 print("正在写入单号为"+no+"的数据")
-                responseToInfo = requests.get(url=urlToInfo+no, headers=headers).json()
-                # print(responseToInfo)
-                # exit(0)
                 try:
+                    responseToInfo = requests.get(url=urlToInfo+no, headers=headers).json()
+                    # print(responseToInfo)
+                    # exit(0)
                     data_row = [responseToInfo['data']['wpInfo']['wpid'], responseToInfo['data']['wpInfo']['class1'],
                                 responseToInfo['data']['wpInfo']['wpSource'], responseToInfo['data']['wpInfo']['starttime'],
                                 responseToInfo['data']['wpInfo']['wpType'], responseToInfo['data']['wpInfo']['note'],
@@ -44,7 +44,6 @@ def main():
                                 responseToInfo['data']['wpInfo']['delayReason'],
                                 responseToInfo['data']['wpInfo']['satisfaction']]
                     csv_write.writerow(data_row)
-                    time.sleep(1)
                 except :
                     continue
 
