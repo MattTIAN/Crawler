@@ -26,27 +26,29 @@ def main():
 
         # 取每一页的wpid并跳转到相应的detailInfo页面，获得json数据，提取需要的信息调整格式进行输出
         for page in range(1, totalPage+1):
-            response = requests.get(url=format(url % page), headers=headers).json()
-            pageSize = response['pageSize']
-            for item in range(pageSize):
+            try:
+                response = requests.get(url=format(url % page), headers=headers).json()
+                pageSize = response['pageSize']
+                for item in range(pageSize):
 
-                no = response['data']['wpInfos'][item]['wpid']
-                print("正在写入单号为"+no+"的数据")
-                try:
-                    responseToInfo = requests.get(url=urlToInfo+no, headers=headers).json()
-                    # print(responseToInfo)
-                    # exit(0)
-                    data_row = [responseToInfo['data']['wpInfo']['wpid'], responseToInfo['data']['wpInfo']['class1'],
-                                responseToInfo['data']['wpInfo']['wpSource'], responseToInfo['data']['wpInfo']['starttime'],
-                                responseToInfo['data']['wpInfo']['wpType'], responseToInfo['data']['wpInfo']['note'],
-                                responseToInfo['data']['wpInfo']['summary'], responseToInfo['data']['wpInfo']['nextState'],
-                                responseToInfo['data']['wpInfo']['isDelay'], responseToInfo['data']['wpInfo']['delayNum'],
-                                responseToInfo['data']['wpInfo']['delayReason'],
-                                responseToInfo['data']['wpInfo']['satisfaction']]
-                    csv_write.writerow(data_row)
-                except :
-                    continue
-
+                    no = response['data']['wpInfos'][item]['wpid']
+                    print("正在写入单号为"+no+"的数据")
+                    try:
+                        responseToInfo = requests.get(url=urlToInfo+no, headers=headers).json()
+                        # print(responseToInfo)
+                        # exit(0)
+                        data_row = [responseToInfo['data']['wpInfo']['wpid'], responseToInfo['data']['wpInfo']['class1'],
+                                    responseToInfo['data']['wpInfo']['wpSource'], responseToInfo['data']['wpInfo']['starttime'],
+                                    responseToInfo['data']['wpInfo']['wpType'], responseToInfo['data']['wpInfo']['note'],
+                                    responseToInfo['data']['wpInfo']['summary'], responseToInfo['data']['wpInfo']['nextState'],
+                                    responseToInfo['data']['wpInfo']['isDelay'], responseToInfo['data']['wpInfo']['delayNum'],
+                                    responseToInfo['data']['wpInfo']['delayReason'],
+                                    responseToInfo['data']['wpInfo']['satisfaction']]
+                        csv_write.writerow(data_row)
+                    except :
+                        continue
+            except:
+                continue
         f.close()
         print("--------------------------数据爬取完成---------------------------------")
 
